@@ -56,6 +56,23 @@ impl Squat {
             package: package.into(),
         }
     }
+
+    /// Retrieves the name of the package that may be squatted.
+    pub fn package(&self) -> &str {
+        match self {
+            Squat::Bitflip(package) => package,
+            Squat::OmittedCharacter(package) => package,
+            Squat::RepeatedCharacter(package) => package,
+            Squat::SwappedCharacters(package) => package,
+            Squat::SwappedWords(package) => package,
+            Squat::Typo(package) => package,
+            Squat::Version(package) => package,
+            Squat::Custom {
+                message: _message,
+                package,
+            } => package,
+        }
+    }
 }
 
 impl Display for Squat {
