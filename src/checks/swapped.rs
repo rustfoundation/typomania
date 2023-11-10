@@ -30,15 +30,33 @@ impl Check for Characters {
 /// Checks whether one or more words have been swapped in the given package name.
 pub struct Words {
     delimiters: Vec<char>,
+    max_k: usize,
 }
 
 impl Words {
     /// Sets up a swapped word check, using each character in `delimiters` as a possible word
-    /// delimiter.
+    /// delimiter, and a max `k` of 5 (see `[Words::with_max_k]` for more detail).
     pub fn new(delimiters: &str) -> Self {
         Self {
             delimiters: delimiters.chars().collect(),
+            max_k: 5,
         }
+    }
+
+    /// Changes the maximum value of k when calculating the k-permutations of the parts of the
+    /// package name.
+    ///
+    /// What this practically means is that packages with values beyond the maximum will only have
+    /// partial permutations checked; for example, if the limit is 3 and a package
+    /// `foo-bar-baz-quux` is checked, the only package names that will be checked are the three
+    /// element permutations (eg `foo-bar-baz`, `foo-bar-quux`, etc), not permutations of the full
+    /// set.
+    ///
+    /// This is provided to avoid inadvertent DoS issues. For offline analysis, you may want to set
+    /// `max_k` to a large value, provided you have sufficient RAM.
+    pub fn with_max_k(mut self, max_k: usize) -> Self {
+        self.max_k = max_k;
+        self
     }
 }
 
@@ -62,7 +80,14 @@ impl Check for Words {
             return Ok(squats);
         }
 
-        for case in tokens.into_iter().permutations(num_tokens) {
+        // Apply the max_k.
+        let k = if num_tokens > self.max_k {
+            self.max_k
+        } else {
+            num_tokens
+        };
+
+        for case in tokens.into_iter().permutations(k) {
             for delimiter in self.delimiters.iter() {
                 let name_to_check = case.join(&format!("{delimiter}"));
                 if corpus.possible_squat(&name_to_check, name, package)? {
@@ -122,6 +147,15 @@ mod tests {
                 "ghi-abc-def",
                 "ghi_def_abc",
                 "ghi-def-abc",
+            ],
+        )?;
+
+        // Test max_k.
+        assert_check(
+            Words::new("-_").with_max_k(2),
+            "a-b-c",
+            &[
+                "b_a", "c_b", "c-b", "a-c", "c_a", "b-a", "c-a", "a_c", "b_c", "a-b", "b-c", "a_b",
             ],
         )?;
 
