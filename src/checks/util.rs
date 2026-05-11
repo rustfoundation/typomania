@@ -2,11 +2,7 @@ pub(super) fn rebuild_name(orig: &str, index: usize, replace: usize, replacement
     format!(
         "{before}{replacement}{after}",
         before = &orig[0..index],
-        after = if let Some(after) = orig.get(index + replace..) {
-            after
-        } else {
-            ""
-        }
+        after = orig.get(index + replace..).unwrap_or_default()
     )
 }
 

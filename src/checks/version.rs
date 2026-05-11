@@ -12,7 +12,7 @@ impl Check for Version {
         package: &dyn Package,
     ) -> crate::Result<Vec<Squat>> {
         let trimmed = name
-            .trim_end_matches(&['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+            .trim_end_matches(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
             .trim_end_matches('-');
 
         Ok(
