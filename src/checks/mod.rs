@@ -8,6 +8,8 @@ use std::fmt::Display;
 use crate::{Corpus, Package};
 
 mod bitflips;
+mod homoglyph;
+mod keyboard;
 mod omitted;
 mod repeated;
 mod swapped;
@@ -19,6 +21,8 @@ mod version;
 mod testutil;
 
 pub use bitflips::Bitflips;
+pub use homoglyph::Homoglyph;
+pub use keyboard::KeyboardAdjacent;
 pub use omitted::Omitted;
 pub use repeated::Repeated;
 pub use swapped::{Characters as SwappedCharacters, Words as SwappedWords};
@@ -39,6 +43,8 @@ pub trait Check: Sync + Send {
 #[derive(Debug, Clone)]
 pub enum Squat {
     Bitflip(String),
+    Homoglyph(String),
+    KeyboardAdjacent(String),
     OmittedCharacter(String),
     RepeatedCharacter(String),
     SwappedCharacters(String),
@@ -61,6 +67,8 @@ impl Squat {
     pub fn package(&self) -> &str {
         match self {
             Squat::Bitflip(package) => package,
+            Squat::Homoglyph(package) => package,
+            Squat::KeyboardAdjacent(package) => package,
             Squat::OmittedCharacter(package) => package,
             Squat::RepeatedCharacter(package) => package,
             Squat::SwappedCharacters(package) => package,
@@ -79,6 +87,12 @@ impl Display for Squat {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Squat::Bitflip(package) => write!(f, "may be a bitflip of {package}"),
+            Squat::Homoglyph(package) => {
+                write!(f, "uses visually similar characters to {package}")
+            }
+            Squat::KeyboardAdjacent(package) => {
+                write!(f, "uses a keyboard-adjacent key from {package}")
+            }
             Squat::OmittedCharacter(package) => write!(f, "omits characters in {package}"),
             Squat::RepeatedCharacter(package) => write!(f, "repeats characters in {package}"),
             Squat::SwappedCharacters(package) => write!(f, "swaps characters in {package}"),
