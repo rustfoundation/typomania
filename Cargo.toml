@@ -20,7 +20,7 @@ default = ["rayon"]
 rayon = ["dep:rayon"]
 
 [dev-dependencies]
-clap = { version = "=4.6.1", features = ["derive"] }
+clap = { version = "=4.6.6", features = ["derive"] }
 criterion = "=0.8.2"
 proptest = "=1.11.0"
 
