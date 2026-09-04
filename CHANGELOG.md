@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1](https://github.com/rustfoundation/typomania/compare/v0.2.0...v0.2.1) - 2026-09-04
+
+### Fixed
+
+- *(deps)* update rust crate itertools to 0.15.0 ([#26](https://github.com/rustfoundation/typomania/pull/26))
+
+### Other
+
+- *(deps)* lock file maintenance ([#25](https://github.com/rustfoundation/typomania/pull/25))
+- *(deps)* update actions/checkout action to v7 ([#27](https://github.com/rustfoundation/typomania/pull/27))
+
 ## [0.2.0](https://github.com/rustfoundation/typomania/compare/v0.1.2...v0.2.0) - 2026-06-12
 
 ### Fixed
