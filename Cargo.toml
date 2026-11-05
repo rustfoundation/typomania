@@ -22,7 +22,7 @@ rayon = ["dep:rayon"]
 [dev-dependencies]
 clap = { version = "=4.6.1", features = ["derive"] }
 criterion = "=0.8.2"
-proptest = "=1.11.0"
+proptest = "=1.12.0"
 
 [[example]]
 name = "registry"
